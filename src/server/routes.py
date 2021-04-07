@@ -22,4 +22,4 @@ def login():
 
 @app.route("/calendar")
 def calendar():
-    return render_template('caledar.html')
+    return render_template('calendar.html')
