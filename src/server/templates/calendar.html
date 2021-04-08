@@ -1,6 +1,258 @@
 {% extends "layout.html" %}
 {% block content %}
-    
-        
-     
+
+
+<div class="container">
+    <div id="notifications" style="z-index: 1" padding="10">
+        <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+            This is a primary alert—check it out!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <script>
+                //$('.alert').fadeIn();
+                $('.alert').alert();
+            </script>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-12" id="calendar">
+            <div class="row row-cols-3" id="calendar-Header">
+                <div class="col">
+                    <button type="button" class="btn btn-primary">Create Event</button>
+                </div>
+                <div class="col text-center">
+                    <span id="month">April</span>
+                </div>
+                <div class="col .offset-md-4 ">
+                    <div class="btn-group float-right" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-outline-primary" onclick="previousMonth();"><span aria-hidden="true">&laquo;</span></button>
+                        <button type="button" class="btn btn-outline-primary" onclick="setCurrentMonth();">Today</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="nextMonth();"><span aria-hidden="true">&raquo;</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <table class="col" id="calendar-Body">
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+
+                            <th>Mon</th>
+
+                            <th>Tue</th>
+
+                            <th>Wed</th>
+
+                            <th>Thu</th>
+
+                            <th>Fri</th>
+
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--This essentially gets errased when the page is loaded its just here for template -->
+                        <tr>
+                            <td>
+                                <div class="day">28</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">29</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">30</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">31</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">1</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">2</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">3</div>
+                                <div class="events"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="day">4</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">5</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">6</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day active">7
+                                    <div class="events">
+                                        <div class="event">
+                                            <span class="eventDot green"></span>
+                                            <span class="eventText">Event Name</span>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
+                            </td>
+                            <td>
+                                <div class="day">8</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">9</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">10</div>
+                                <div class="events"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="day">11</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">12</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">13</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">14</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">15</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">16</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">17</div>
+                                <div class="events"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="day">18</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">19</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">20</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">21</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">22</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">23</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">24</div>
+                                <div class="events"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="day">25</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">26</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">27</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">28</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">29</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">30</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">1</div>
+                                <div class="events"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="day">2</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">3</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">4</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">5</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">6</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">7</div>
+                                <div class="events"></div>
+                            </td>
+                            <td>
+                                <div class="day">8</div>
+                                <div class="events"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                    <script src = "../static/scripts/calender.js"></script>
+                </table>
+            </div>
+            <div class="row" id="calendar-Footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock content %}
