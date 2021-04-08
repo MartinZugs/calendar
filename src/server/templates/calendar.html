@@ -10,7 +10,8 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             <script>
-                $('.alert').fadeIn();
+                //$('.alert').fadeIn();
+
                 $('.alert').alert();
             </script>
         </div>
@@ -21,14 +22,14 @@
                 <div class="col">
                     <button type="button" class="btn btn-primary">Create Event</button>
                 </div>
-                <div class="col text-center ">
-                    <span>April</span>
+                <div class="col text-center">
+                    <span id="month">April</span>
                 </div>
                 <div class="col .offset-md-4 ">
                     <div class="btn-group float-right" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-outline-primary"><span aria-hidden="true">&laquo;</span></button>
-                        <button type="button" class="btn btn-outline-primary">Today</button>
-                        <button type="button" class="btn btn-outline-primary"><span aria-hidden="true">&raquo;</span></button>
+                        <button type="button" class="btn btn-outline-primary" onclick="previousMonth();"><span aria-hidden="true">&laquo;</span></button>
+                        <button type="button" class="btn btn-outline-primary" onclick="setCurrentMonth();">Today</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="nextMonth();"><span aria-hidden="true">&raquo;</span></button>
                     </div>
                 </div>
             </div>
@@ -52,6 +53,8 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!--This essentially gets errased when the page is loaded its just here for template -->
+
                         <tr>
                             <td>
                                 <div class="day">28</div>
@@ -96,8 +99,16 @@
                                 <div class="events"></div>
                             </td>
                             <td>
-                                <div class="day">7</div>
-                                <div class="events"></div>
+                                <div class="day active">7
+                                    <div class="events">
+                                        <div class="event">
+                                            <span class="eventDot green"></span>
+                                            <span class="eventText">Event Name</span>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
                             </td>
                             <td>
                                 <div class="day">8</div>
@@ -233,8 +244,7 @@
                             </td>
                         </tr>
                     </tbody>
-
-
+                    <script src = "../static/scripts/calender.js"></script>
 
                 </table>
             </div>
