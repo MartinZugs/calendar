@@ -55,6 +55,7 @@ $("#eventForm").submit(function (e) {
     var eventType = EventType.Standard;
     var days = []
     var event = new CalendarEvent()
+    
     array.forEach(element => {
         switch (element.name) {
             case "eventType":
@@ -141,7 +142,9 @@ function insertEvent(event) {
             // let year = date.getFullYear();
             // let dateString = year+"-"+month+"-"+day;
             //console.log(date, date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime(), startDate, endDate)
-            if (date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()) {
+            var dateName = date.toLocaleDateString('default', { weekday: 'long' });
+            
+            if (date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime() && event.daysActive.includes(dateName)) {
                 let eventHtml = createEventHTML(event);
                 let day = cell.children[0];
                 let events = day.children[0];
