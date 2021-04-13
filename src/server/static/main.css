@@ -46,10 +46,13 @@ body {
  }
 
 
-
+.day:first-of-type {
+  border-left:1px solid gray;
+}
 
  .day {
-   height: 100px;
+    min-height: 100px;
+    
    width: 100%;
    background-color: whitesmoke;
    border-right:1px solid gray;
@@ -65,6 +68,9 @@ body {
   table-layout: fixed;
   padding: 10px;
  }
+ table  td {
+   padding: 0;
+ }
 
  thead {
    text-align: center;
@@ -79,14 +85,26 @@ body {
   border-radius: 50%;
   display: inline-block;
  }
- .eventDot.green {
+ /* .eventDot.green {
   
   background-color: green;
   
-}
+} */
 
-.event > .eventText {
+.calendarEvent > .eventText {
   font-size: small;
 }
 
-  
+.checkbox {
+  visibility: hidden;
+  position: absolute;
+}
+.inactiveDay {
+  color: gray;
+}
+.activeDay {
+  color:blue;
+}
+.left{
+  margin-right: 45px !important;
+}
