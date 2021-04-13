@@ -37,6 +37,7 @@ function createDay(date) {
     dayDiv.className = "day";
     dayDiv.innerHTML = date.getDate();
     dayDiv.setAttribute("data-date", date.toString());
+    $(dayDiv).data("date",date);
     var events = document.createElement("div");
     events.className = "events";
     if (date.getMonth() == currentDay.getMonth() && date.getDate() == currentDay.getDate() && currentDay.getFullYear() == date.getFullYear()) {
@@ -55,14 +56,18 @@ function createDay(date) {
 
 function createEventHTML(event) {
     var eventHTML = document.createElement("div");
-    eventHTML.className = "event";
+    eventHTML.className = "calendarEvent";
+    $(eventHTML).data("event", event);
     var dot = document.createElement("span");
-    dot.className = "eventDot " + event.color;
+    dot.className = "eventDot";
+    dot.style.backgroundColor = event.color;
     var text = document.createElement("span");
     text.className = "eventText";
     text.innerHTML = event.name;
+    eventHTML.onclick = eventClick;
     eventHTML.appendChild(dot);
     eventHTML.appendChild(text);
+    
     return eventHTML;
 }
 
@@ -71,13 +76,18 @@ function previousMonth() {
     var dt = new Date(currentDay.getFullYear(), activeMonth, 1);
     generateCalendar(dt);
     setMonthText(new Date(currentDay.getFullYear(), activeMonth, 1));
-
+    events.forEach(element => {
+        insertEvent(element);
+    });
 }
 function nextMonth() {
     activeMonth++;
     var dt = new Date(currentDay.getFullYear(), activeMonth, 1);
     generateCalendar(dt);
     setMonthText(new Date(currentDay.getFullYear(), activeMonth, 1));
+    events.forEach(element => {
+        insertEvent(element);
+    });
 }
 
 function setCurrentMonth() {
@@ -85,6 +95,9 @@ function setCurrentMonth() {
     var startDate = startOfMonth(currentDay);
     generateCalendar(startDate);
     setMonthText(new Date(currentDay.getFullYear(), activeMonth, 1));
+    events.forEach(element => {
+        insertEvent(element);
+    });
 }
 
 function setMonthText(date) {
@@ -100,4 +113,17 @@ $(document).ready(() => {
     var startDate = startOfMonth(currentDay);
     generateCalendar(startDate);
 });
+
+
+$(".checkbox").change(function() {
+    
+    if (this.checked) {
+        $("label[for='"+$(this).attr("id")+"']").removeClass("inactiveDay"); 
+        $("label[for='"+$(this).attr("id")+"']").addClass("activeDay"); 
+    }
+    else {
+        $("label[for='"+$(this).attr("id")+"']").removeClass("activeDay"); 
+        $("label[for='"+$(this).attr("id")+"']").addClass("inactiveDay"); 
+    }
+})
 
