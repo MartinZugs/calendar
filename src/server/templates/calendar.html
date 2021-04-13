@@ -19,16 +19,168 @@
         <div class="col-12" id="calendar">
             <div class="row row-cols-3" id="calendar-Header">
                 <div class="col">
-                    <button type="button" class="btn btn-primary">Create Event</button>
+                    <button type="btn btn-primary" data-toggle="modal" data-target="#eventModal"
+                        class="btn btn-primary">Create Event</button>
                 </div>
                 <div class="col text-center">
                     <span id="month">April</span>
                 </div>
                 <div class="col .offset-md-4 ">
                     <div class="btn-group float-right" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-outline-primary" onclick="previousMonth();"><span aria-hidden="true">&laquo;</span></button>
-                        <button type="button" class="btn btn-outline-primary" onclick="setCurrentMonth();">Today</button>
-                        <button type="button" class="btn btn-outline-primary" onclick="nextMonth();"><span aria-hidden="true">&raquo;</span></button>
+                        <button type="button" class="btn btn-outline-primary" onclick="previousMonth();"><span
+                                aria-hidden="true">&laquo;</span></button>
+                        <button type="button" class="btn btn-outline-primary"
+                            onclick="setCurrentMonth();">Today</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="nextMonth();"><span
+                                aria-hidden="true">&raquo;</span></button>
+                    </div>
+                </div>
+            </div>
+            <!--Modal-->
+            <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">Create Event</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="eventForm">
+                                <div class="form-row justify-content-md-center">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" name="eventType"
+                                                id="eventSwitch">
+                                            <label class="custom-control-label" for="eventSwitch">Personal</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEventName">Event Name</label>
+                                    <input type="text" name="eventName" class="form-control" id="inputEventName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEventDiscription">Event Discription</label>
+                                    <input type="text" name="eventDescription" class="form-control"
+                                        id="inputEventDiscription">
+                                </div>
+                                <div class="form-row justify-content-md-center">
+                                    <span class="col-md-12 text-center">Select Days</span>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input checkbox" name="Sunday" type="checkbox"
+                                            id="sundayCheckbox">
+                                        <label class="form-check-label inactiveDay" for="sundayCheckbox">Sun</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input checkbox" name="Monday" type="checkbox"
+                                            id="mondayCheckbox">
+                                        <label class="form-check-label inactiveDay" for="mondayCheckbox">Mon</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input checkbox" name="Tuesday" type="checkbox"
+                                            id="tuesdayCheckbox">
+                                        <label class="form-check-label inactiveDay" for="tuesdayCheckbox">Tue</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input checkbox" name="Wednesday" type="checkbox"
+                                            id="wednesdayCheckbox">
+                                        <label class="form-check-label inactiveDay" for="wednesdayCheckbox">Wed</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input checkbox" name="Thursday" type="checkbox"
+                                            id="thursdayCheckbox">
+                                        <label class="form-check-label inactiveDay" for="thursdayCheckbox">Thur</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input checkbox" name="Friday" type="checkbox"
+                                            id="fridayCheckbox">
+                                        <label class="form-check-label inactiveDay" for="fridayCheckbox">Fri</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input checkbox" name="Saturday" type="checkbox"
+                                            id="saturdayCheckbox">
+                                        <label class="form-check-label inactiveDay" for="saturdayCheckbox">Sat</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="event-startdate-input" class="col-form-label">Start Date</label>
+                                        <div>
+                                          <input class="form-control" name="eventStartDate" type="date" value="2021-04-13" id="event-startdate-input">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="event-enddate-input" class="col-form-label">End Date</label>
+                                        <div>
+                                          <input class="form-control" name="eventEndDate" type="date" value="2021-04-13" id="event-enddate-input">
+                                        </div>
+                                      </div>
+                                  </div>
+                                  
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="start-time-input" class="col-form-label">Start Time</label>
+                                        <div>
+                                            <input class="form-control" name="eventStartTime" type="time" value="13:45"
+                                                id="start-time-input">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-6">
+                                        <label for="end-time-input" class="col-form-label">End Time</label>
+                                        <div>
+                                            <input class="form-control" name="eventEndTime" type="time" value="13:45"
+                                                id="end-time-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="eventcolor-input" class="col-form-label">Color</label>
+                                    <div>
+                                        <input class="form-control" name="eventColor" type="color" value="#563d7c"
+                                            id="eventcolor-input">
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="shareEventModal" tabindex="-1" aria-labelledby="shareEventModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-center" id="shareEventModalLabel">Share Event</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="shareEventForm">
+                             
+                                <div class="form-group">
+                                    <label for="inputshareEmail">Email</label>
+                                    <input type="text" name="email" class="form-control" id="inputshareEmail">
+                                </div>
+                                <div class="form-group">
+                                    
+                                    
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="copyLink()">Copy Link</button>
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -97,16 +249,16 @@
                                 <div class="events"></div>
                             </td>
                             <td>
-                                <div class="day active">7
+                                <div class="day">7
                                     <div class="events">
-                                        <div class="event">
+                                        <!-- <div class="calendarEvent">
                                             <span class="eventDot green"></span>
                                             <span class="eventText">Event Name</span>
-                                        </div>
-                                        
+                                        </div> -->
+
                                     </div>
                                 </div>
-                                
+
                             </td>
                             <td>
                                 <div class="day">8</div>
@@ -244,7 +396,8 @@
                     </tbody>
 
 
-                    <script src = "../static/scripts/calender.js"></script>
+                    <script src="../static/scripts/calender.js"></script>
+                    <script src="../static/scripts/event.js"></script>
                 </table>
             </div>
             <div class="row" id="calendar-Footer">
