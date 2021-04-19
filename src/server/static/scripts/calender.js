@@ -1,12 +1,32 @@
 var currentDay = new Date();
 var activeMonth = currentDay.getMonth();
+
+const Day = {
+    Sunday: "Sunday",
+    Monday: "Monday",
+    Tuesday: "Tuesday",
+    Wednesday: "Wednesday",
+    Thursday: "Thursday",
+    Friday: "Friday",
+    Saturday: "Saturday"
+}
+
 //event for testing
 var testEvent = {
-    "color": "green",
+    "color": "#008000",
     "name": "Test Event",
-    "date": currentDay.toDateString()
+    "startDate": formatDate(currentDay),
+    "endDate": formatDate(currentDay),
+    "startTime":"01:00",
+    "endTime":"01:00",
+    "type": "Standard",
+    "daysActive": [getFullDayName(currentDay)],
+    "timeSlotLength": "10",
+    "description":"test"
 
 }
+
+
 
 function startOfMonth(date) {
     return new Date(date.getFullYear(), date.getMonth(), 1);
@@ -43,33 +63,14 @@ function createDay(date) {
     if (date.getMonth() == currentDay.getMonth() && date.getDate() == currentDay.getDate() && currentDay.getFullYear() == date.getFullYear()) {
         dayDiv.className = "day active";
     }
-    //in future loop through events
-    if (date.toDateString() == testEvent.date) {
-
-        events.appendChild(createEventHTML(testEvent));
-    }
+    
     dayDiv.appendChild(events);
     day.appendChild(dayDiv);
     
     return day;
 }
 
-function createEventHTML(event) {
-    var eventHTML = document.createElement("div");
-    eventHTML.className = "calendarEvent";
-    $(eventHTML).data("event", event);
-    var dot = document.createElement("span");
-    dot.className = "eventDot";
-    dot.style.backgroundColor = event.color;
-    var text = document.createElement("span");
-    text.className = "eventText";
-    text.innerHTML = event.name;
-    eventHTML.onclick = eventClick;
-    eventHTML.appendChild(dot);
-    eventHTML.appendChild(text);
-    
-    return eventHTML;
-}
+
 
 function previousMonth() {
     activeMonth--;
@@ -80,6 +81,7 @@ function previousMonth() {
         insertEvent(element);
     });
 }
+
 function nextMonth() {
     activeMonth++;
     var dt = new Date(currentDay.getFullYear(), activeMonth, 1);
@@ -105,25 +107,61 @@ function setMonthText(date) {
     $("#month").html(month);
 }
 
+function formatDate(date) {
+    let year  = date.getFullYear(),
+        month = "" + (date.getMonth()+1),
+        day   = "" + date.getDate();
+        
+    if (day.length < 2) 
+        day = "0" + day;
+    if (month.length <2)
+        month = "0" + month;
+    
+    return [year, month, day].join('-');
+}
+
+function formatTime(date) {
+        let hour  = "" + (date.getHours()),
+            minutes = "" + (date.getMinutes());
+
+        if (hour.length < 2)
+            hour = "0" + hour;
+        if (minutes.length < 2)
+            minutes = "0" + minutes;
+        
+        return [hour, minutes].join(":");
+}
 
 
 $(document).ready(() => {
 
-    console.log(testEvent);
+    //console.log(testEvent);
     var startDate = startOfMonth(currentDay);
     generateCalendar(startDate);
+    insertEvent(testEvent);
 });
 
 
-$(".checkbox").change(function() {
-    
-    if (this.checked) {
-        $("label[for='"+$(this).attr("id")+"']").removeClass("inactiveDay"); 
-        $("label[for='"+$(this).attr("id")+"']").addClass("activeDay"); 
-    }
-    else {
-        $("label[for='"+$(this).attr("id")+"']").removeClass("activeDay"); 
-        $("label[for='"+$(this).attr("id")+"']").addClass("inactiveDay"); 
-    }
-})
+function getFullDayName(date) {
+    var day = date.toDateString().substring(0,3);
+    switch(day) {
+        case "Sun":
+            return Day.Sunday;
+        case "Mon":
+            return Day.Monday;
+        case "Tue":
+            return Day.Tuesday;
+        case "Wed":
+            return Day.Wednesday;
+        case "Thu":
+            return Day.Thursday;
+        case "Fri":
+            return Day.Friday;
+        case "Sat":
+            return Day.Saturday;
+        default:
+            break;
+}
+}
+
 
