@@ -1,11 +1,31 @@
+
+
     if (user) {
         console.log(user);
     }
 //temporary will be stored in localstorage    
-var events = []
+
+//events.push(testEvent);
+//console.log(events);
 const EventType = {
     Personal: "Personal",
     Standard: "Standard"
+}
+
+class SignUp {
+    name
+    email
+    
+    startTime
+    endTime
+
+    constructor(name, email, startTime, endTime) {
+        this.name = name;
+        this.email = email;
+        
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }
 
 
@@ -59,8 +79,8 @@ function openCreateEventForm() {
     $( "#eventShare" ).hide();
     $("#eventSignUps").hide();
     $("#eventDelete").hide();
-    $( "#eventSubmit" ).unbind();
-    $( "#eventSubmit" ).click((e)=> {
+    // $( "#eventSubmit" ).unbind();
+    $( "#eventForm" ).submit((e)=> {
         e.preventDefault();
         submitCreateEvent();
     });
@@ -85,13 +105,13 @@ function openEditEventForm(event) {
     resetEventForm();
 
     $("#eventShare").show();
-    $("#eventShare").click((e)=>{openEventShare(event);});
+    $("#eventShare").click((e)=>{openShareEvent(event);});
 
     $("#eventSignUps").show();
     $("#eventSignUps").click((e)=>{openEventSignUps(event)});
 
     $("#eventDelete").show();
-    $("#eventDelete").click((e)=>{openDeleteEvent(event)});
+    $("#eventDelete").on("click",(e)=>{e.preventDefault(); openDeleteEvent(event);});
     fillEventForm(event);
     
     $( "#eventSubmit" ).unbind();
@@ -101,10 +121,35 @@ function openEditEventForm(event) {
     });
 }
 
+
 function openEventSignUps(event) {
 
 }
+
 function openDeleteEvent(event) {
+    $("#eventModal").modal('hide');
+    $("#confirmModal").modal('show');
+
+    $("#confirmSubmision").on("submit", (e)=> {
+        e.preventDefault();
+        var index = events.indexOf(event);
+        events.splice(index,1);
+        removeEventHtml(event);
+        
+        $.ajax(
+            {
+                method: "POST",
+                url: `/calendar/${user.username}/addEvent`,
+                type: "application/json",
+                data: JSON.stringify(event),
+                success: (e)=> {
+                    console.log(e)
+                }
+            }
+        )
+
+        $("#confirmModal").modal('hide');
+    })
 
 }
 
@@ -230,6 +275,17 @@ function submitCreateEvent() {
     events.push(event);
     //console.log(events);
     insertEvent(event);
+    $.ajax(
+        {
+            method: "POST",
+            url: `/calendar/${user.username}/addEvent`,
+            type: "application/json",
+            data: JSON.stringify(event),
+            success: (e)=> {
+                console.log(e)
+            }
+        }
+    )
 }
 
 function submitEditEvent(event) {
@@ -245,6 +301,17 @@ function submitEditEvent(event) {
     //$(eventHTML).data("event", event);
     //events.push(event);
     updateEventHTML(event);
+    $.ajax(
+        {
+            method: "POST",
+            url: `/calendar/${user.username}/updateEvent`,
+            type: "application/json",
+            data: JSON.stringify(event),
+            success: (e)=> {
+                console.log(e)
+            }
+        }
+    )
     //insertEvent(event);
 }
 
@@ -295,6 +362,48 @@ function updateEventHTML(event) {
 
 
             }
+        }
+    }
+}
+
+function removeEventHtml(event) {
+    var table = document.getElementById("calendar-Body");
+    var once = true;
+    for (let row of table.rows) {
+        if (once) {
+            once = false;
+            continue;
+        }
+        
+        for (let cell of row.cells) {
+            let date = new Date($(cell.children[0]).data("date"));
+
+            let startDate = new Date(event.startDate + "T00:00:00");
+            let endDate = new Date(event.endDate + "T00:00:00");
+            //console.log(cell);
+            // let month = date.getMonth() + 1; 
+            // let day = date.getDate();
+            // let year = date.getFullYear();
+            // let dateString = year+"-"+month+"-"+day;
+            //console.log(date, date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime(), startDate, endDate)
+            var dateName = date.toLocaleDateString('default', { weekday: 'long' });
+            let day = cell.children[0];
+            let events = day.children[0];
+            
+            if (events.children.length >0) {
+                
+                Array.from(events.children).forEach((e)=> {
+                    let item = $(e).data("event");
+                    console.log(item);
+                    if (item.name == event.name) {
+                        $(e).remove();
+                    }
+                });
+            }
+            
+            
+
+    
         }
     }
 }
@@ -359,14 +468,28 @@ function insertEvent(event) {
 function openShareEvent(event){
     $("#eventModal").modal('hide');
     $("#shareEventModal").modal('show');
-    console.log(event);
+    
+    $("#shareEventForm").on("submit",function (e) {
+        e.preventDefault();
+        var data = $("#shareEventForm").serializeArray()
+        data[0].event = event;
+        console.log(data)
+        $.ajax(
+            {
+                method: "POST",
+                url: `/calendar/${user.username}/shareEvent`,
+                type: "application/json",
+                data: JSON.stringify(data),
+                success: (e)=> {
+                    console.log(e)
+                }
+            }
+        )
+        $("#shareEventModal").modal('hide');
+    })
 }
 
-$("#shareEventForm").submit(function (e) {
-    e.preventDefault();
-    console.log($("#shareEventForm").serializeArray())
-    $("#shareEventModal").modal('hide');
-})
+
 
 $(".event").on("click", eventClick)
 function eventClick() {
@@ -385,27 +508,131 @@ function eventClick() {
     
 }
 
+// $("#eventSignUpForm").on("submit", function(e) {
+//     e.preventDefault();
+//     submitEventSignUp(e)
+// });
+
 function openEventSignUp(event) {
+    //console.log(event);
     $("#signUpModal").modal('show');
-    $("#eventSubmit").onclick((e)=>{
+    fillSignUpDropDown(event);
+    $("#eventSignUpForm").on("submit",(e)=>{
         e.preventDefault();
         submitEventSignUp(event);
     })
 }
 
+function fillSignUpDropDown(event) {
+    $("#SelectTimeSlot").empty();
+    var timeSlotLength = parseInt(event.timeSlotLength);
+    var startTime = event.startTime;
+    var startHour = parseInt(startTime.split(":")[0])
+    var startMin = parseInt(startTime.split(":")[1])
+    
+    var endTime = event.endTime;
+    var endHour = parseInt(endTime.split(":")[0])
+    var endMin = parseInt(endTime.split(":")[1])
+    var totalHours = endHour - startHour;
+    var totalMin  = endMin - startMin;
+    var totalTime = totalHours*60 + totalMin;
+    console.log(`${startTime}, ${endTime}, ${totalTime}`)
+
+    var possibleSignUpsCount = totalTime/timeSlotLength;
+
+    
+    for (let i = 0; i <possibleSignUpsCount;i++) {
+        
+
+        var option = document.createElement("option");
+       
+        
+        
+        var time = timeSlotLength *i;
+
+        let starthour = startHour + parseInt(time/60);
+        let startmin = startMin + parseInt(time%60);
+        if (startmin.toString().length == 1) {
+            startmin = "0"+startmin
+        }
+        if (starthour.toString().length == 1) {
+            starthour = "0"+starthour
+        }
+
+        let endhour = startHour + parseInt((time + timeSlotLength)/60);
+        let endmin = startMin + parseInt((time+ timeSlotLength)%60);
+        if (endmin.toString().length == 1) {
+            endmin = "0"+endmin
+        }
+        var dontInsert = false;
+        for (let j = 0; j <event.signups.length;j++) {
+            if (starthour+":"+startmin ==  event.signups[j].startTime & endhour+":"+endmin == event.signups[j].endTime) {
+                dontInsert = true;
+            }
+        }
+        if (!dontInsert) {
+            option.innerHTML = starthour+":"+startmin +"-"+ endhour+":"+endmin;
+            option.value = starthour+":"+startmin +"-"+ endhour+":"+endmin;
+            
+            $("#SelectTimeSlot").append(option);
+        }
+        
+    }
+
+    // event.signups.forEach(element => {
+        
+    // });
+
+}
+
 function submitEventSignUp(event) {
-    $("#eventModal").modal('hide');
+    
+    $("#signUpModal").modal('hide');
     var array = $("#eventSignUpForm").serializeArray()
     console.log(array)
     
     var signUp = createSignUp(array);
     //var event = new CalendarEvent()
     addSignUpToEvent(event, signUp);
-}
+    // $.post(`/calendar/signUp/${user.username}`,JSON.stringify(signUp), function(data) {
+    //     console.log(data);
+    // });
+    $.ajax(
+        {
+            method: "POST",
+            url: `/calendar/signUp/${user.username}`,
+            type: "application/json",
+            data: JSON.stringify(signUp),
+            success: (e)=> {
+                console.log(e)
+            }
+        }
+    )
+}   
 
 function createSignUp(array) {
     console.log("TODO create signup and its class")
-
+    var signUp = new SignUp();
+    array.forEach((e)=> {
+        switch(e.name) {
+            case "name":
+                signUp.name = e.value;
+                break;
+            case "email":
+                signUp.email = e.value;
+                break;
+            case "TimeSlot":
+                let times = e.value.split("-");
+                signUp.startTime = times[0]
+                signUp.endTime = times[1]
+                break;
+            default:
+                break;
+        }
+    });
+    console.log(signUp);
+    return signUp;
+    
 }
 function addSignUpToEvent(event, signUp) {
     
