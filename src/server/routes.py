@@ -10,6 +10,8 @@ from server.models import *
 
 dbengine: engine
 db: SQLAlchemy
+dbengine = db.engine
+connection = db.engine.connect()
 
 @app.route("/")
 @app.route("/home")

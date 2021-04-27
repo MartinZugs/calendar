@@ -47,7 +47,7 @@ class RegisteredForTime(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     time_slot_id = db.Column(db.Integer, db.ForeignKey('free_time_slot.id'), nullable=False)
-    signup_email = db.Column(db.String(120), nullable=False)
+    signup_id = db.Column(db.Integer, nullable=False)
     last_email_sent = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 
