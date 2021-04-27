@@ -2,7 +2,9 @@
 {% block content %}
 
 {% if user %}
-<script>user = {"username":"{{user}}", "admin":{{admin}}};</script>
+<script>var user = {"username":"{{user}}", "admin":{{admin}}};
+    var events = JSON.parse('{{events | tojson}}');
+</script>
 
 {% endif %}
 <div class="container">
@@ -34,13 +36,19 @@
                         
                         <div class="form-group">
                             <label for="inputName">Name</label>
-                            <input type="text" name="eventName" class="form-control" name="Name" id="inputName" required>
+                            <input type="text" name="name" class="form-control" name="Name" id="inputName" required>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail">Email</label>
-                            <input type="email" name="eventDescription" class="form-control" name="Email" id="inputEmail" required>
+                            <input type="email" name="email" class="form-control" name="Email" id="inputEmail" required>
                         </div>
-                        
+                        <div class="form-group">
+                            <label for="SelectTimeSlot">Example select</label>
+                            <select class="form-control" id="SelectTimeSlot" name="TimeSlot" required>
+                              <option>1</option>
+                              
+                            </select>
+                          </div>
                         
                         
                         

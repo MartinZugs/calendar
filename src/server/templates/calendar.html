@@ -26,7 +26,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="eventForm">
+                    <form id="eventForm" >
                         <div class="form-row justify-content-md-center">
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
@@ -157,7 +157,7 @@
                      
                         <div class="form-group">
                             <label for="inputshareEmail">Email</label>
-                            <input type="text" name="email" class="form-control" id="inputshareEmail">
+                            <input type="text" name="email" class="form-control" id="inputshareEmail" required>
                         </div>
                         <div class="form-group">
                             
@@ -173,6 +173,30 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="confirmModalLabel">Confirm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="confirmSubmision">
+                     
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="row justify-content-md-center">
         <div class="col-12" id="calendar">
             <div class="row row-cols-3" id="calendar-Header">
@@ -180,8 +204,8 @@
                     {% if user %}
                     <button type="btn btn-primary" 
                         class="btn btn-primary" onclick="openCreateEventForm()">Create Event</button>
-                    <script> user = { "username": "{{user.username}}", "admin": {{user.admin}}}; </script>
-                    
+                    <script> var user = { "username": "{{user.username}}", "admin": {{user.admin}}}; </script>
+                    <script>var events = JSON.parse('{{events | tojson}}');</script>
                         
                     {% endif %}
         
