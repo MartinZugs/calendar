@@ -12,19 +12,19 @@ const Day = {
 }
 
 //event for testing
-var testEvent = {
-    "color": "#008000",
-    "name": "Test Event",
-    "startDate": formatDate(currentDay),
-    "endDate": formatDate(currentDay),
-    "startTime":"01:00",
-    "endTime":"01:00",
-    "type": "Standard",
-    "daysActive": [getFullDayName(currentDay)],
-    "timeSlotLength": "10",
-    "description":"test"
-
-}
+// var testEvent = {
+//     "color": "#008000",
+//     "name": "Test Event",
+//     "startDate": formatDate(currentDay),
+//     "endDate": formatDate(currentDay),
+//     "startTime":"13:00",
+//     "endTime":"15:00",
+//     "type": "Standard",
+//     "daysActive": [getFullDayName(currentDay)],
+//     "timeSlotLength": "10",
+//     "description":"test",
+//     "signups":[]
+// }
 
 
 
@@ -138,7 +138,10 @@ $(document).ready(() => {
     //console.log(testEvent);
     var startDate = startOfMonth(currentDay);
     generateCalendar(startDate);
-    insertEvent(testEvent);
+    events.forEach((e)=>{
+        insertEvent(e);
+    })
+    //insertEvent(testEvent);
 });
 
 
