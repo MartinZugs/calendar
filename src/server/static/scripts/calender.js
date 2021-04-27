@@ -1,6 +1,7 @@
 var currentDay = new Date();
 var activeMonth = currentDay.getMonth();
 
+
 const Day = {
     Sunday: "Sunday",
     Monday: "Monday",
@@ -25,6 +26,7 @@ const Day = {
 //     "description":"test",
 //     "signups":[]
 // }
+
 
 
 
@@ -63,7 +65,7 @@ function createDay(date) {
     if (date.getMonth() == currentDay.getMonth() && date.getDate() == currentDay.getDate() && currentDay.getFullYear() == date.getFullYear()) {
         dayDiv.className = "day active";
     }
-    
+
     dayDiv.appendChild(events);
     day.appendChild(dayDiv);
     
@@ -77,6 +79,7 @@ function previousMonth() {
     var dt = new Date(currentDay.getFullYear(), activeMonth, 1);
     generateCalendar(dt);
     setMonthText(new Date(currentDay.getFullYear(), activeMonth, 1));
+
     events.forEach(element => {
         insertEvent(element);
     });
@@ -87,6 +90,7 @@ function nextMonth() {
     var dt = new Date(currentDay.getFullYear(), activeMonth, 1);
     generateCalendar(dt);
     setMonthText(new Date(currentDay.getFullYear(), activeMonth, 1));
+
     events.forEach(element => {
         insertEvent(element);
     });
@@ -97,15 +101,18 @@ function setCurrentMonth() {
     var startDate = startOfMonth(currentDay);
     generateCalendar(startDate);
     setMonthText(new Date(currentDay.getFullYear(), activeMonth, 1));
+
     events.forEach(element => {
         insertEvent(element);
     });
+
 }
 
 function setMonthText(date) {
     const month = date.toLocaleString('default', { month: 'long' });
     $("#month").html(month);
 }
+
 
 function formatDate(date) {
     let year  = date.getFullYear(),
@@ -133,7 +140,9 @@ function formatTime(date) {
 }
 
 
+
 $(document).ready(() => {
+
 
     //console.log(testEvent);
     var startDate = startOfMonth(currentDay);
@@ -166,5 +175,4 @@ function getFullDayName(date) {
             break;
 }
 }
-
 
