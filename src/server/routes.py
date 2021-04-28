@@ -116,7 +116,7 @@ def calendar_Remove_Event(username):
     print(username)
     data = json.loads(request.get_data())
     print(data)
-    delevent = Event.query.get_or_404(data['name'])
+    delevent = Event.query.filter_by(title=data['name']).first()
 
     db.session.delete(delevent)
     db.session.commit()
@@ -129,15 +129,16 @@ def calendar_Update_Event(username):
     print(username)
     data = json.loads(request.get_data())
     print(data)
-    event = Event.query.get_or_404(data['name'])
-    
+    event = Event.query.filter_by(title=data['name']).first()
+    current_contact = User.query.filter_by(username=username).first()
+
     event.days_active = json.dumps(data['daysActive'])
     event.timeslot_length = data['timeSlotLength']
     event.start_date = data['startDate']
     event.end_date = data['endDate']
     event.start_time = data['startTime']
     event.end_time = data['endTime']
-    event.title = data['title']
+    event.title = data['name']
     event.description = data['description']
     event.event_owned_by = current_contact.id
     event.color = data['color']
@@ -145,7 +146,6 @@ def calendar_Update_Event(username):
 
     db.session.commit()
     flash ('The contact has been updated!', 'success')
-    
     return "true"
 
 @app.route("/calendar/<username>/shareEvent", methods = ['POST'])
@@ -180,7 +180,7 @@ def appointmentSignUpEvent(username):
     #get user from db
     print(username)
     data = json.loads(request.get_data())
-    
+
     print(data)
     signup = RegisteredForTime(name=data['name'], email=data['email'], start_time = data['startTime'], end_time = data['endTime'])
     #insert to db
