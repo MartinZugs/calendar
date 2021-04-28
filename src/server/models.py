@@ -20,6 +20,12 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
+    def serialize(self):
+        return {
+            'id':self.id,
+            'username':self.username,
+            'email': self.email
+            }
 
 
 class AppointmentType(db.Model):
@@ -31,6 +37,13 @@ class AppointmentType(db.Model):
 
     def __repr__(self):
         return f"AppointmentType({self.title}')"
+    def serialize(self):
+        return {
+            'id':self.id,
+            'number_of_allowed_bookings':self.number_of_allowed_bookings,
+            'title': self.title,
+            'description': self.description
+            }
 
 
 class FreeTimeSlot(db.Model):
@@ -41,7 +54,15 @@ class FreeTimeSlot(db.Model):
     weekday = db.Column(db.String(9), nullable=False)
     appointment_type = db.Column(db.Integer, db.ForeignKey('appointment_type.id'), nullable=False)
     fts_owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
+    def serialize(self):
+        return {
+            'id':self.id,
+            'start_time':self.start_time,
+            'end_time': self.end_time,
+            'weekday': self.weekday,
+            'appointment_type':self.appointment_type,
+            'fts_owned_by': self.fts_owned_by
+            }
 
 class Event(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -60,7 +81,21 @@ class Event(db.Model):
 
     def __repr__(self):
         return f"Event({self.title}')"
-
+    def serialize(self):
+        return {
+            'id':self.id,
+            'start_time':self.start_time,
+            'end_time': self.end_time,
+            'days_active': self.days_active,
+            'timeslot_length':self.timeslot_length,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'title':self.title,
+            'description': self.description,
+            'event_owned_by':self.event_owned_by,
+            'color': self.color,
+            'type': self.type
+            }
 
 class RegisteredForTime(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -72,7 +107,17 @@ class RegisteredForTime(db.Model):
     signup_id = db.Column(db.Integer, nullable=False)
     last_email_sent = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-
+    def serialize(self):
+        return {
+            'id':self.id,
+            'start_time':self.start_time,
+            'end_time': self.end_time,
+            'name': self.name,
+            'signup_id':self.signup_id,
+            'last_email_sent': self.last_email_sent,
+            'event_id': self.event_id,
+            
+            }
 
 
 

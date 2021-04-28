@@ -20,7 +20,7 @@ connection = db.engine.connect()
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', title='Home')
+    return redirect(url_for('login'))
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -85,9 +85,13 @@ def calendar():
         current_contact = User.query.filter_by(email=current_user._get_current_object().email).first()
         user = {"admin":"true", "username":current_contact.username}
         evnts = Event.query.filter_by(event_owned_by=current_contact.id).all()
-        print(evnts)
+        results = []
+        for event in evnts:
+            item = event.Event.serialize()
+            results.append(item)
+        print(json.dumps(results))
 
-    return render_template('calendar.html', user = user, events = evnts)
+    return render_template('calendar.html', user = user, events = json.dumps(results))
 
 @app.route("/calendar/<username>/addEvent", methods = ['POST'])
 def calendar_Add_Event(username):
@@ -98,7 +102,7 @@ def calendar_Add_Event(username):
     current_contact = User.query.filter_by(username=username).first()
     print(data)
     
-    event = Event(start_date= data['startDate'], end_date=data['endDate'], start_time=['startTime'], end_time=['endTime'], title = ['name'], description = ['description'],event_owned_by=current_contact.id, color=data['color'], type = data['type'], daysActive = json.dumps(data['daysActive']) )
+    event = Event(start_date= data['startDate'], end_date=data['endDate'], start_time=data['startTime'], end_time=data['endTime'], title = data['name'], description = data['description'],event_owned_by=current_contact.id, color=data['color'], type = data['type'], days_active = json.dumps(data['daysActive']) )
 
     db.session.add(event)
     db.session.commit()
