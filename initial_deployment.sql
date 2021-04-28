@@ -15,8 +15,8 @@ CREATE TABLE Event (
     description VARCHAR(100),
     start_time DATETIME,
     end_time DATETIME,
-    owned_by INT,
-    FOREIGN KEY (owned_by) REFERENCES User(id)
+    event_owned_by INT,
+    FOREIGN KEY (event_owned_by) REFERENCES User(id)
 );
 
 CREATE TABLE AppointmentType (
@@ -32,8 +32,8 @@ CREATE TABLE FreeTimeSlot (
     start_time DATETIME,
     end_time DATETIME,
     appointment_type INT,
-    owned_by INT,
-    FOREIGN KEY (owned_by) REFERENCES User(id),
+    fts_owned_by INT,
+    FOREIGN KEY (ft_owned_by) REFERENCES User(id),
     FOREIGN KEY (appointment_type) REFERENCES AppointmentType(id)
 );
 

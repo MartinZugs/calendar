@@ -40,7 +40,7 @@ class FreeTimeSlot(db.Model):
     end_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     weekday = db.Column(db.String(9), nullable=False)
     appointment_type = db.Column(db.Integer, db.ForeignKey('appointment_type.id'), nullable=False)
-    owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    fts_owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 class RegisteredForTime(db.Model):
@@ -58,7 +58,7 @@ class Event(db.Model):
     end_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(200), nullable=False)
-    owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    event_owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return f"Event({self.title}')"
