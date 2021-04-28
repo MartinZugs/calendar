@@ -166,4 +166,24 @@ def appointmentSignUpEvent(username):
     
     
 def formatEvent(data):
-    print(data)
+    
+
+    startDate = data['start_date'].split(' ')[0]
+    endDate = data['end_date'].split(' ')[0]
+    daysActive = json.loads(data['days_active'])
+    event = {
+        'id': data['id'],
+        'startTime': data['start_time'],
+        'endTime': data['end_time'],
+        'daysActive': daysActive,
+        'timeSlotLength': data['timeslot_length'],
+        'startDate': startDate,
+        'endDate': endDate,
+        'name': data['title'],
+        'description': data['description'],
+        'event_owned_by': data['event_owned_by'],
+        'color': data['color'],
+        'type': data['type'],
+    }
+    print(event)
+    return event
