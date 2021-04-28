@@ -130,7 +130,7 @@ def calendar_Update_Event(username):
     data = json.loads(request.get_data())
     print(data)
     event = Event.query.get_or_404(data['name'])
-    
+
     event.days_active = json.dumps(data['daysActive'])
     event.timeslot_length = data['timeSlotLength']
     event.start_date = data['startDate']
@@ -145,7 +145,7 @@ def calendar_Update_Event(username):
 
     db.session.commit()
     flash ('The contact has been updated!', 'success')
-    return redirect (url_for ('contact', PersonID=PersonID))
+
     return "true"
 
 @app.route("/calendar/<username>/shareEvent", methods = ['POST'])
