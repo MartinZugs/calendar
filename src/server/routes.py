@@ -94,8 +94,14 @@ def calendar_Add_Event(username):
     #need to pass in user
     print(username)
     data = json.loads(request.get_data())
-    event = Event()
+    
+    current_contact = User.query.filter_by(username=username).first()
     print(data)
+    
+    event = Event(start_date= data['startDate'], end_date=data['endDate'], start_time=['startTime'], end_time=['endTime'], title = ['name'], description = ['description'],event_owned_by=current_contact.id, color=data['color'], type = data['type'], daysActive = json.dumps(data['daysActive']) )
+
+    db.session.add(event)
+    db.session.commit()
     return "true"
 
 @app.route("/calendar/<username>/removeEvent", methods = ['POST'])
