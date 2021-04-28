@@ -139,7 +139,7 @@ function openDeleteEvent(event) {
         $.ajax(
             {
                 method: "POST",
-                url: `/calendar/${user.username}/addEvent`,
+                url: `/calendar/${user.username}/removeEvent`,
                 type: "application/json",
                 data: JSON.stringify(event),
                 success: (e)=> {
