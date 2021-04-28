@@ -116,8 +116,9 @@ def calendar_Remove_Event(username):
     #need to pass in user
     print(username)
     data = json.loads(request.get_data())
+    current_contact = User.query.filter_by(username=username).first()
     print(data)
-    delevent = Event.query.filter_by(title=data['name']).first()
+    delevent = Event.query.filter_by(title=data['name'], event_owned_by=current_contact.id).first()
     
     db.session.delete(delevent)
     db.session.commit()
