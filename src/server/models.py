@@ -54,8 +54,10 @@ class RegisteredForTime(db.Model):
 class Event(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    start_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    end_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    start_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    end_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    start_time = db.Column(db.String(20), nullable=True)
+    end_time = db.Column(db.String(20), nullable=True)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(200), nullable=False)
     event_owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
