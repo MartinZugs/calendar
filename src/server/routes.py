@@ -115,6 +115,12 @@ def calendar_Remove_Event(username):
     print(username)
     data = json.loads(request.get_data())
     print(data)
+    delevent = Event.query.get_or_404(data['name'])
+
+    db.session.delete(delevent)
+    db.session.commit()
+    flash('The event has been removed!', 'success')
+    return redirect(url_for('calendar'))
     return "true"
 
 @app.route("/calendar/<username>/updateEvent", methods = ['POST'])
