@@ -87,7 +87,8 @@ def calendar():
         evnts = Event.query.filter_by(event_owned_by=current_contact.id).all()
         results = []
         for event in evnts:
-            item = event.Event.serialize()
+            print(event)
+            item = event.serialize()
             results.append(item)
         print(json.dumps(results))
 
@@ -102,7 +103,7 @@ def calendar_Add_Event(username):
     current_contact = User.query.filter_by(username=username).first()
     print(data)
     
-    event = Event(start_date= data['startDate'], end_date=data['endDate'], start_time=data['startTime'], end_time=data['endTime'], title = data['name'], description = data['description'],event_owned_by=current_contact.id, color=data['color'], type = data['type'], days_active = json.dumps(data['daysActive']) )
+    event = Event(start_date= data['startDate'], end_date=data['endDate'], start_time=data['startTime'], end_time=data['endTime'], title = data['name'], description = data['description'],event_owned_by=current_contact.id, color=data['color'], type = data['type'], days_active = json.dumps(data['daysActive']), timeslot_length = data['timeSlotLength'] )
 
     db.session.add(event)
     db.session.commit()
