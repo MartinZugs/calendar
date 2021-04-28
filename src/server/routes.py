@@ -40,7 +40,7 @@ def login():
     
     if current_user.is_authenticated:
         flash('You are already logged in!', 'danger')
-        return redirect(url_for('home'))
+        return redirect(url_for('calendar'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -50,7 +50,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('calendar.html', title='Login', form=form)
+    return render_template('login.html', title='Login', form=form)
 
 @app.route("/calendar")
 def calendar():
