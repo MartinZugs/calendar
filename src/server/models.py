@@ -1,7 +1,7 @@
 from datetime import datetime
 from server import db, login_manager
 from flask_login import UserMixin
-from sqlalchemy import orm
+
 
 db.Model.metadata.reflect(db.engine)
 
@@ -78,6 +78,7 @@ class Event(db.Model):
     event_owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     color = db.Column(db.String(8), nullable=False, default='#00FF00')
     type = db.Column(db.String(50), nullable=False, default='Standard')
+    signUps = db.relationship("RegisteredForTime", cascade="all,delete" )
 
     def __repr__(self):
         return f"Event({self.title}')"
