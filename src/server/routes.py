@@ -116,7 +116,7 @@ def calendar_Remove_Event(username):
     print(username)
     data = json.loads(request.get_data())
     print(data)
-    delevent = Event.query.get_or_404(data['name'])
+    delevent = Event.query.filter_by(name=data['name']).first()
 
     db.session.delete(delevent)
     db.session.commit()
@@ -129,7 +129,7 @@ def calendar_Update_Event(username):
     print(username)
     data = json.loads(request.get_data())
     print(data)
-    event = Event.query.get_or_404(data['name'])
+    event = Event.query.filter_by(name=data['name']).first()
 
     event.days_active = json.dumps(data['daysActive'])
     event.timeslot_length = data['timeSlotLength']
