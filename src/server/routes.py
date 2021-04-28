@@ -121,7 +121,6 @@ def calendar_Remove_Event(username):
     db.session.delete(delevent)
     db.session.commit()
     flash('The event has been removed!', 'success')
-    return redirect(url_for('calendar'))
     return "true"
 
 @app.route("/calendar/<username>/updateEvent", methods = ['POST'])
@@ -130,6 +129,23 @@ def calendar_Update_Event(username):
     print(username)
     data = json.loads(request.get_data())
     print(data)
+    event = Event.query.get_or_404(data['name'])
+    
+    event.days_active = json.dumps(data['daysActive'])
+    event.timeslot_length = data['timeSlotLength']
+    event.start_date = data['startDate']
+    event.end_date = data['endDate']
+    event.start_time = data['startTime']
+    event.end_time = data['endTime']
+    event.title = data['title']
+    event.description = data['description']
+    event.event_owned_by = current_contact.id
+    event.color = data['color']
+    event.type = data['type']
+
+    db.session.commit()
+    flash ('The contact has been updated!', 'success')
+    return redirect (url_for ('contact', PersonID=PersonID))
     return "true"
 
 @app.route("/calendar/<username>/shareEvent", methods = ['POST'])
