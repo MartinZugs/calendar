@@ -59,6 +59,8 @@ class Event(db.Model):
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(200), nullable=False)
     event_owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    color = db.Column(db.String(8), nullable=False, default='#00FF00')
+    type = db.Column(db.String(50), nullable=False, default='Standard')
 
     def __repr__(self):
         return f"Event({self.title}')"
