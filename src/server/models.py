@@ -43,17 +43,11 @@ class FreeTimeSlot(db.Model):
     fts_owned_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
-class RegisteredForTime(db.Model):
-    __table_args__ = {'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True)
-    time_slot_id = db.Column(db.Integer, db.ForeignKey('free_time_slot.id'), nullable=False)
-    signup_id = db.Column(db.Integer, nullable=False)
-    last_email_sent = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-
 class Event(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    days_active = db.Column(db.String(200), nullable=True)
+    timeslot_length = db.Column(db.Integer, nullable=True)
     start_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     end_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     start_time = db.Column(db.String(20), nullable=True)
@@ -68,6 +62,16 @@ class Event(db.Model):
         return f"Event({self.title}')"
 
 
+class RegisteredForTime(db.Model):
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    start_time = db.Column(db.String(20), nullable=False)
+    end_time = db.Column(db.String(20), nullable=False)
+    # time_slot_id = db.Column(db.Integer, db.ForeignKey('free_time_slot.id'), nullable=False)
+    name = db.Column(db.String(200), nullable=False)
+    signup_id = db.Column(db.Integer, nullable=False)
+    last_email_sent = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
 
 
 
