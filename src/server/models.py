@@ -104,7 +104,7 @@ class RegisteredForTime(db.Model):
     end_time = db.Column(db.String(20), nullable=False)
     # time_slot_id = db.Column(db.Integer, db.ForeignKey('free_time_slot.id'), nullable=False)
     name = db.Column(db.String(200), nullable=False)
-    signup_id = db.Column(db.Integer, nullable=False)
+    
     last_email_sent = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     def serialize(self):
@@ -113,6 +113,7 @@ class RegisteredForTime(db.Model):
             'start_time':self.start_time,
             'end_time': self.end_time,
             'name': self.name,
+            'email': self.email,
             'signup_id':self.signup_id,
             'last_email_sent': self.last_email_sent,
             'event_id': self.event_id,

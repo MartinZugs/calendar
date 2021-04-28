@@ -145,7 +145,7 @@ def calendar_Update_Event(username):
 
     db.session.commit()
     flash ('The contact has been updated!', 'success')
-    return redirect (url_for ('contact', PersonID=PersonID))
+    
     return "true"
 
 @app.route("/calendar/<username>/shareEvent", methods = ['POST'])
@@ -180,7 +180,9 @@ def appointmentSignUpEvent(username):
     #get user from db
     print(username)
     data = json.loads(request.get_data())
+    
     print(data)
+    signup = RegisteredForTime(name=data['name'], email=data['email'], start_time = data['startTime'], end_time = data['endTime'])
     #insert to db
     return "true"
     
