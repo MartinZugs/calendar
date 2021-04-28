@@ -55,15 +55,24 @@ def login():
 @app.route("/calendar")
 def calendar():
     #need to pass in user
-    user = {"admin":"true", "username":"test"}
+    if not current_user.is_authenticated:
+        flash('You need to be logged in!', 'danger')
+        return redirect(url_for('login'))
+    else:
 
-    return render_template('calendar.html', user = user, events = events)
+        current_contact = User.query.filter_by(email=current_user._get_current_object().email).first()
+        user = {"admin":"true", "username":current_contact.username}
+        evnts = Event.query.filter_by(event_owned_by=current_contact.id).all()
+        print(evnts)
+
+    return render_template('calendar.html', user = user, events = evnts)
 
 @app.route("/calendar/<username>/addEvent", methods = ['POST'])
 def calendar_Add_Event(username):
     #need to pass in user
     print(username)
     data = json.loads(request.get_data())
+    event = Event()
     print(data)
     return "true"
 
