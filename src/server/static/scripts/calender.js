@@ -38,6 +38,7 @@ function generateCalendar(startDate) {
     var table = $("#calendar-Body > tbody");
     table.empty();
     var newStart = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - startDate.getDay());
+    setMonthText(new Date(startDate.getFullYear(), activeMonth, 1));
     for (let i = 0; i < 6; i++) {
         table.append(createWeek(new Date(newStart.getFullYear(), newStart.getMonth(), newStart.getDate() + 7 * i)));
     }
@@ -110,7 +111,8 @@ function setCurrentMonth() {
 
 function setMonthText(date) {
     const month = date.toLocaleString('default', { month: 'long' });
-    $("#month").html(month);
+    var year= date.getFullYear();
+    $("#month").html(month+", "+year);
 }
 
 

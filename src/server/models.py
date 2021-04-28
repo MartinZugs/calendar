@@ -114,7 +114,6 @@ class RegisteredForTime(db.Model):
             'end_time': self.end_time,
             'name': self.name,
             'email': self.email,
-            'signup_id':self.signup_id,
             'last_email_sent': self.last_email_sent,
             'event_id': self.event_id,
             

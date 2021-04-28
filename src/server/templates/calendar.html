@@ -4,7 +4,7 @@
 
 <div class="container">
     <div id="notifications" style="z-index: 1" padding="10">
-        <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+        <!-- <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
             This is a primary alert—check it out!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -14,7 +14,7 @@
 
                 $('.alert').alert();
             </script>
-        </div>
+        </div> -->
     </div>
     <!--Modal-->
     <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
@@ -42,7 +42,7 @@
                             <input type="text" name="eventName" class="form-control" id="inputEventName" required>
                         </div>
                         <div class="form-group">
-                            <label for="inputEventDiscription">Event Discription</label>
+                            <label for="inputEventDiscription">Event Description</label>
                             <input type="text" name="eventDescription" class="form-control" id="inputEventDiscription" required>
                         </div>
                         <div class="form-row justify-content-md-center">
@@ -118,7 +118,7 @@
                                 <label for="end-time-input" class="col-form-label">Time Slot Length</label>
                                 <div>
                                     <input class="form-control" name="eventTimeSlotLength" type="number" 
-                                        id="end-time-input" value="10">
+                                        id="event-timeLength-input" value="10">
                                 </div>
                                 <small id="timeSlotHelp" class="form-text text-muted">In Minutes</small>
                             </div>
@@ -134,7 +134,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="eventDelete" >Delete Event</button>
-                    <button type="button" class="btn btn-secondary" id="eventSignUps" >View SignUps</button>
+                    <button type="button" class="btn btn-secondary" id="eventSignUps" >SignUps</button>
                     <button type="button" class="btn btn-secondary" id="eventShare" >Share</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" id="eventSubmit">Submit</button>
@@ -213,7 +213,7 @@
         
                 </div>
                 <div class="col text-center">
-                    <span id="month">April</span>
+                    <span id="month"></span>
                 </div>
                 <div class="col .offset-md-4 ">
                     <div class="btn-group float-right" role="group" aria-label="Basic example">

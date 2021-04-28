@@ -108,7 +108,8 @@ def calendar_Add_Event(username):
 
     db.session.add(event)
     db.session.commit()
-    return "true"
+    message = {"message":'The event has been added!',"type": "success"}
+    return json.dumps(message)
 
 @app.route("/calendar/<username>/removeEvent", methods = ['POST'])
 def calendar_Remove_Event(username):
@@ -117,11 +118,12 @@ def calendar_Remove_Event(username):
     data = json.loads(request.get_data())
     print(data)
     delevent = Event.query.filter_by(title=data['name']).first()
-
+    
     db.session.delete(delevent)
     db.session.commit()
-    flash('The event has been removed!', 'success')
-    return "true"
+    
+    message = {"message":'The event has been removed!',"type": "success"}
+    return json.dumps(message)
 
 @app.route("/calendar/<username>/updateEvent", methods = ['POST'])
 def calendar_Update_Event(username):
@@ -145,8 +147,9 @@ def calendar_Update_Event(username):
     event.type = data['type']
 
     db.session.commit()
-    flash ('The contact has been updated!', 'success')
-    return "true"
+    #flash ('The Event has been updated!', 'success')
+    message = {"message":'The Event has been updated!',"type": "success"}
+    return json.dumps(message)
 
 @app.route("/calendar/<username>/shareEvent", methods = ['POST'])
 def calendar_Share_Event(username):
@@ -154,22 +157,62 @@ def calendar_Share_Event(username):
     print(username)
     data = json.loads(request.get_data())
     print(data)
-    return "true"
+    message = {"message":'The Event has been shared!',"type": "success"}
+    return json.dumps(message)
 
 @app.route("/calendar/<username>", methods= ["GET"])
 def appointmentSignUp(username):
 
     if request.args.__contains__('event'):
         event = request.args['event']
-        specificEvents = []
-        print(event)
-        for e in events:
-            if e['name'] == event:
-                specificEvents.append(e)
-        return render_template('appointmentSignUp.html', admin="false", user= username, events = specificEvents)
-    else:
+        
+        
+        current_contact = User.query.filter_by(username= username).first()
+        if current_contact == None:
+            flash(f"Account {username} doesn't Exist")
+            return render_template('appointmentSignUp.html', admin="false", user= username, events =[])
+        else:
 
-        return render_template('appointmentSignUp.html', admin="false", user= username, events =events)
+        
+            event = Event.query.filter_by(title=event,event_owned_by=current_contact.id, type="Standard").first()
+            if event is not None:
+                event = formatEvent(event.serialize())
+                registered = RegisteredForTime.query.filter_by(event_id=event['id']).all()
+                results = []
+                if registered is not None:
+
+                    for reg in registered:
+                        reg = formatSignup(reg.serialize())
+                        results.append(reg)
+                    event['signups'] = results
+                return render_template('appointmentSignUp.html', admin="false", user= username, events = [event])
+            else:
+                flash("No Events Found")
+                return render_template('appointmentSignUp.html', admin="false", user= username, events =[])
+    else:
+        current_contact = User.query.filter_by(username= username).first()
+        if current_contact == None:
+            
+            flash(f"Account {username} doesn't Exist")
+            return render_template('appointmentSignUp.html', admin="false", user= username, events =[])
+        else:
+            events = Event.query.filter_by(event_owned_by=current_contact.id, type="Standard").all()
+            eventResults = []
+            if events is not None:
+                for event in events:
+                
+                    item = formatEvent(event.serialize())
+                    registered = RegisteredForTime.query.filter_by(event_id=item['id']).all()
+                    results = []
+                    for reg in registered:
+                        reg = formatSignup(reg.serialize())
+                        results.append(reg)
+                    item['signups'] = results
+                    eventResults.append(item)
+                return render_template('appointmentSignUp.html', admin="false", user= username, events =eventResults)
+            else:
+                flash("No Events Found")
+                return render_template('appointmentSignUp.html', admin="false", user= username, events =[])
     
 
 
@@ -179,12 +222,18 @@ def appointmentSignUp(username):
 def appointmentSignUpEvent(username):
     #get user from db
     print(username)
-    data = json.loads(request.get_data())
-
+    dictionary = json.loads(request.get_data())
+    data = dictionary['signUp']
+    eventData = dictionary['event']
+    event = Event.query.filter_by(title=eventData['name']).first()
     print(data)
-    signup = RegisteredForTime(name=data['name'], email=data['email'], start_time = data['startTime'], end_time = data['endTime'])
+    signup = RegisteredForTime(name=data['name'], email=data['email'], start_time = data['startTime'], end_time = data['endTime'], event_id=event.id)
+    
     #insert to db
-    return "true"
+    db.session.add(signup)
+    db.session.commit()
+    message = {"message":'Congrats you have signed up!',"type": "success"}
+    return json.dumps(message)
     
   
     
@@ -208,6 +257,19 @@ def formatEvent(data):
         'event_owned_by': data['event_owned_by'],
         'color': data['color'],
         'type': data['type'],
+        'signups':[]
     }
     print(event)
     return event
+
+def formatSignup(data):
+    signup = {
+        'id':data['id'],
+        'startTime':data['start_time'],
+        'endTime': data['end_time'],
+        'name': data['name'],
+        'email': data['email'],
+        'last_email_sent': data['last_email_sent'],
+        'event_id': data['event_id'],
+    }
+    return signup

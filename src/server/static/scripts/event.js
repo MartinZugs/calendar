@@ -4,7 +4,7 @@
         console.log(user);
     }
 //temporary will be stored in localstorage    
-
+console.log(events)
 //events.push(testEvent);
 //console.log(events);
 const EventType = {
@@ -79,7 +79,7 @@ function openCreateEventForm() {
     $( "#eventShare" ).hide();
     $("#eventSignUps").hide();
     $("#eventDelete").hide();
-    // $( "#eventSubmit" ).unbind();
+    $( "#eventForm" ).unbind();
     $( "#eventForm" ).submit((e)=> {
         e.preventDefault();
         submitCreateEvent();
@@ -114,8 +114,8 @@ function openEditEventForm(event) {
     $("#eventDelete").on("click",(e)=>{e.preventDefault(); openDeleteEvent(event);});
     fillEventForm(event);
     
-    $( "#eventSubmit" ).unbind();
-    $( "#eventSubmit" ).click((e)=> {
+    $( "#eventForm" ).unbind();
+    $( "#eventForm" ).submit((e)=> {
         e.preventDefault();
         submitEditEvent(event);
     });
@@ -129,7 +129,7 @@ function openEventSignUps(event) {
 function openDeleteEvent(event) {
     $("#eventModal").modal('hide');
     $("#confirmModal").modal('show');
-
+    $("#confirmSubmision").unbind();
     $("#confirmSubmision").on("submit", (e)=> {
         e.preventDefault();
         var index = events.indexOf(event);
@@ -143,7 +143,7 @@ function openDeleteEvent(event) {
                 type: "application/json",
                 data: JSON.stringify(event),
                 success: (e)=> {
-                    console.log(e)
+                    createAlert(JSON.parse(e))
                 }
             }
         )
@@ -173,7 +173,7 @@ function fillEventForm(event) {
     $("#start-time-input").val(event.startTime);
     $("#end-time-input").val(event.endTime);
     $("#eventcolor-input").val(event.color);
-
+    $("#event-timeLength-input").val(event.timeSlotLength);
 
 }
 
@@ -235,7 +235,7 @@ function fillEvent(event, array) {
                 break;
 
             case "eventStartDate":
-                console.log(element.value)
+                //console.log(element.value)
                 event.startDate = element.value;
                 break;
             case "eventEndDate":
@@ -282,7 +282,7 @@ function submitCreateEvent() {
             type: "application/json",
             data: JSON.stringify(event),
             success: (e)=> {
-                console.log(e)
+                createAlert(JSON.parse(e))
             }
         }
     )
@@ -291,7 +291,7 @@ function submitCreateEvent() {
 function submitEditEvent(event) {
     $("#eventModal").modal('hide');
     var array = $("#eventForm").serializeArray()
-    console.log(array)
+    //console.log(array)
     
     //var event = new CalendarEvent()
     fillEvent(event, array);
@@ -308,13 +308,31 @@ function submitEditEvent(event) {
             type: "application/json",
             data: JSON.stringify(event),
             success: (e)=> {
-                console.log(e)
+                createAlert(JSON.parse(e))
             }
         }
     )
     //insertEvent(event);
 }
 
+
+function createAlert(alert) {
+    
+    if (alert.type == "success") 
+    {
+        
+        $('#alerts').append(
+            '<div class="alert alert-success" >' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span>' +
+                '</button>' + alert.message + '</div>');
+        
+    }
+    else 
+    {
+
+    }
+}
 
 function updateEventHTML(event) {
     var table = document.getElementById("calendar-Body");
@@ -344,7 +362,7 @@ function updateEventHTML(event) {
                 
                 Array.from(events.children).forEach((e)=> {
                     let item = $(e).data("event");
-                    console.log(item);
+                    //console.log(item);
                     if (item.name == event.name) {
                         $(e).remove();
                     }
@@ -394,7 +412,7 @@ function removeEventHtml(event) {
                 
                 Array.from(events.children).forEach((e)=> {
                     let item = $(e).data("event");
-                    console.log(item);
+                    //console.log(item);
                     if (item.name == event.name) {
                         $(e).remove();
                     }
@@ -481,7 +499,7 @@ function openShareEvent(event){
                 type: "application/json",
                 data: JSON.stringify(data),
                 success: (e)=> {
-                    console.log(e)
+                    createAlert(JSON.parse(e))
                 }
             }
         )
@@ -550,17 +568,23 @@ function fillSignUpDropDown(event) {
         
         var time = timeSlotLength *i;
 
-        let starthour = startHour + parseInt(time/60);
-        let startmin = startMin + parseInt(time%60);
+        let starthour = startHour + parseInt((startMin+time)/60);
+        let startmin =  parseInt((startMin+time)%60);
+        
+        
+        let endhour = startHour + parseInt(((startMin+time) + timeSlotLength)/60);
+        
+        let endmin =  parseInt(((startMin+time)+ timeSlotLength)%60);
+        console.log(`${starthour},${startmin},${endhour},${endmin}`)
         if (startmin.toString().length == 1) {
             startmin = "0"+startmin
         }
         if (starthour.toString().length == 1) {
             starthour = "0"+starthour
         }
-
-        let endhour = startHour + parseInt((time + timeSlotLength)/60);
-        let endmin = startMin + parseInt((time+ timeSlotLength)%60);
+        if (endhour.toString().length == 1) {
+            endhour = "0"+endhour
+        }
         if (endmin.toString().length == 1) {
             endmin = "0"+endmin
         }
@@ -597,14 +621,15 @@ function submitEventSignUp(event) {
     // $.post(`/calendar/signUp/${user.username}`,JSON.stringify(signUp), function(data) {
     //     console.log(data);
     // });
+    var data = {"event":event,"signUp":signUp}
     $.ajax(
         {
             method: "POST",
             url: `/calendar/signUp/${user.username}`,
             type: "application/json",
-            data: JSON.stringify(signUp),
+            data: JSON.stringify(data),
             success: (e)=> {
-                console.log(e)
+                createAlert(JSON.parse(e))
             }
         }
     )
