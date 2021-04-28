@@ -87,12 +87,13 @@ def calendar():
         evnts = Event.query.filter_by(event_owned_by=current_contact.id).all()
         results = []
         for event in evnts:
-            print(event)
-            item = event.serialize()
-            results.append(item)
-        print(json.dumps(results))
+            
+            item = formatEvent(event.serialize())
 
-    return render_template('calendar.html', user = user, events = json.dumps(results))
+            results.append(item)
+        
+
+    return render_template('calendar.html', user = user, events = results)
 
 @app.route("/calendar/<username>/addEvent", methods = ['POST'])
 def calendar_Add_Event(username):
@@ -145,37 +146,12 @@ def appointmentSignUp(username):
                 specificEvents.append(e)
         return render_template('appointmentSignUp.html', admin="false", user= username, events = specificEvents)
     else:
-        return render_template('appointmentSignUp.html', admin="false", user= username, events = events)
+
+        return render_template('appointmentSignUp.html', admin="false", user= username, events =events)
     
 
-testEvent = {
-    "color": "#008000",
-    "name": "Test_Event",
-    "startDate": "2021-04-26",
-    "endDate": "2021-04-28",
-    "startTime":"13:00",
-    "endTime":"15:00",
-    "type": "Standard",
-    "daysActive": ["Tuesday"],
-    "timeSlotLength": "10",
-    "description":"test",
-    "signups":[]
-}
-testEvent2 = {
-    "color": "#008000",
-    "name": "Test_Event2",
-    "startDate": "2021-04-26",
-    "endDate": "2021-04-29",
-    "startTime":"13:00",
-    "endTime":"15:00",
-    "type": "Standard",
-    "daysActive": ["Wednesday"],
-    "timeSlotLength": "10",
-    "description":"test",
-    "signups":[]
-}
 
-events = [testEvent, testEvent2]
+
 
 @app.route("/calendar/signUp/<username>", methods= ["POST"])
 def appointmentSignUpEvent(username):
@@ -189,3 +165,5 @@ def appointmentSignUpEvent(username):
   
     
     
+def formatEvent(data):
+    print(data)
